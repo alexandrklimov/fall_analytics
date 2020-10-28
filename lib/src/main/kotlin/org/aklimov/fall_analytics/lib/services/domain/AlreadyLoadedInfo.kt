@@ -1,4 +1,4 @@
-package org.aklimov.fall_analytics.lib
+package org.aklimov.fall_analytics.lib.services.domain
 
 import java.time.LocalDate
 

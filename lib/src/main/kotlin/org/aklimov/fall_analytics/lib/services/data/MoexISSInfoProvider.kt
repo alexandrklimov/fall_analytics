@@ -1,12 +1,13 @@
-package org.aklimov.fall_analytics.lib.services
+package org.aklimov.fall_analytics.lib.services.data
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
 import io.ktor.client.request.*
 import mu.KLogging
-import org.aklimov.fall_analytics.lib.Ticker
+import org.aklimov.fall_analytics.lib.services.domain.Ticker
 
 interface InfoProvider{
     suspend fun loadTqbrShares(): List<Ticker>
@@ -19,7 +20,7 @@ class MoexISSInfoProvider(
         logger.info {"Start Loading TQBR Shares..."}
 
         return httpClient.get<String>(TQBR_SHARES_INFO_URL).run{
-            mapper.readTree(this)
+            mapper.readValue(this) as ObjectNode
         }.run{
             (this["securities"] as ObjectNode)["data"] as ArrayNode
         }.map {

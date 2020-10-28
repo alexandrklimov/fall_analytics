@@ -1,4 +1,4 @@
-package org.aklimov.fall_analytics.lib
+package org.aklimov.fall_analytics.lib.services.domain
 
 class Ticker(tickerArg: String) {
     val value = tickerArg.toLowerCase()

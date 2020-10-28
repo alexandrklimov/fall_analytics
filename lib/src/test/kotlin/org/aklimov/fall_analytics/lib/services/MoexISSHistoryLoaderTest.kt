@@ -5,6 +5,9 @@ import io.ktor.client.engine.apache.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
+import org.aklimov.fall_analytics.lib.services.data.MoexISSHistoryLoader
+import org.aklimov.fall_analytics.lib.services.data.MoexISSHistorySaverImpl
+import org.aklimov.fall_analytics.lib.services.data.MoexISSInfoProvider
 import org.jetbrains.exposed.sql.Database
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,10 +38,9 @@ class MoexISSHistoryLoaderTest {
 
     @Test
     fun test() {
-        val db = Database.connect({
+        Database.connect({
             DriverManager.getConnection("jdbc:postgresql://localhost/fall_analytics?user=postgres&password=q1")
         })
-
 
         runBlocking {
             val loader = MoexISSHistorySaverImpl(jdbcTemplate, MoexISSHistoryLoader(httpClient))

@@ -1,11 +1,11 @@
-package org.aklimov.fall_analytics.lib.services
+package org.aklimov.fall_analytics.lib.services.data
 
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import kotlinx.coroutines.flow.collect
 import mu.KLogging
-import org.aklimov.fall_analytics.lib.AlreadyLoadedInfo
-import org.aklimov.fall_analytics.lib.Ticker
+import org.aklimov.fall_analytics.lib.services.domain.AlreadyLoadedInfo
+import org.aklimov.fall_analytics.lib.services.domain.Ticker
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
