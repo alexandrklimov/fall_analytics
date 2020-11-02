@@ -1,6 +1,7 @@
 package org.aklimov.fall_analytics.lib.services.copmutation
 
 import org.aklimov.fall_analytics.lib.services.domain.FallDetectResult
+import org.aklimov.fall_analytics.lib.services.domain.OpenClose
 import org.aklimov.fall_analytics.lib.services.domain.Point
 import org.aklimov.fall_analytics.lib.services.domain.Ticker
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -20,7 +21,7 @@ class Utils private constructor() {
             val data = mutableSetOf<Point>()
 
             transaction{
-                connection.createStatement().executeQuery("SELECT tradedate, close FROM ${ticker.value}").use{
+                connection.createStatement().executeQuery("SELECT tradedate, close, open FROM ${ticker.value}").use{
                     while (it.next()) {
                         data.add(
                             Point(
@@ -30,7 +31,8 @@ class Utils private constructor() {
                                     ),
                                     ZoneId.systemDefault()
                                 ),
-                                it.getDouble("close")
+                                it.getDouble("close"),
+                                it.getDouble("open"),
                             )
                         )
                     }
@@ -55,9 +57,9 @@ class Utils private constructor() {
                 for (p in tail) {
                     lastCheckedPointAfterStart = p
 
-                    if (p.price >= startPoint.price) {
+                    if (p.close >= startPoint.close) {
                         break
-                    } else if (computeAbsChng(startPoint.price, p.price) > fallChng) {
+                    } else if (computeAbsChng(startPoint.close, p.close) > fallChng) {
                         resList.add(FallDetectResult(startPoint, p))
                         break
                     }
@@ -74,6 +76,20 @@ class Utils private constructor() {
 
 
         fun computeChng(base: Double, other: Double): Double = (other - base) / base
+
+        fun checkListOfGrow(points: List<Point>): Boolean{
+            val priceList = listOf(points.first().close, points[1].open) + points.subList(1, points.size).map(Point::close)
+            val minPrice = requireNotNull(priceList.minOrNull())
+            return (points.first().close == minPrice) or (points[1].open == minPrice)
+        }
+
+        fun computeChngOfWnd(points: List<Point>): Double{
+            val base = minOf(points.first().close, points[1].open)
+            val maxCloseOfWnd = requireNotNull(
+                points.subList(1, points.size).map(Point::close).maxOrNull()
+            )
+            return computeChng(base, maxCloseOfWnd)
+        }
 
         //#### END COMPANION OBJECT #####
     }

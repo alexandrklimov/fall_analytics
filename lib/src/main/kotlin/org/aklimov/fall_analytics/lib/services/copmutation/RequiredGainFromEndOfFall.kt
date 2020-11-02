@@ -38,7 +38,7 @@ class RequiredGainFromEndOfFall {
             //gives us required profit
             var maxChngDuringProfitLvlSearch = Double.NEGATIVE_INFINITY
             val profitPoint: Point? = data.tailSet(fallDetectResult.end, false).firstOrNull { p ->
-                val tmpChng = computeChng(fallDetectResult.end.price, p.price)
+                val tmpChng = computeChng(fallDetectResult.end.close, p.close)
 
                 if (tmpChng > maxChngDuringProfitLvlSearch) maxChngDuringProfitLvlSearch = tmpChng
 
@@ -53,12 +53,12 @@ class RequiredGainFromEndOfFall {
             var lowest: Point? = null
             var maxPossibleProfitPoint: Point? = null
             if (profitPoint != null) {
-                lowest = data.subSet(fallDetectResult.end, profitPoint).minByOrNull(Point::price)
+                lowest = data.subSet(fallDetectResult.end, profitPoint).minByOrNull(Point::close)
                 for (p in data.tailSet(profitPoint)) {
-                    if (p.price < fallDetectResult.end.price && p.price < profitPoint.price) {
+                    if (p.close < fallDetectResult.end.close && p.close < profitPoint.close) {
                         break
-                    } else if (p.price > profitPoint.price &&
-                        (maxPossibleProfitPoint == null || p.price > maxPossibleProfitPoint.price)
+                    } else if (p.close > profitPoint.close &&
+                        (maxPossibleProfitPoint == null || p.close > maxPossibleProfitPoint.close)
                     ) {
                         maxPossibleProfitPoint = p
                     }
@@ -104,7 +104,7 @@ class RequiredGainFromEndOfFall {
                     .registerTypeAdapter(
                         Point::class.java,
                         JsonSerializer<Point> { src, _, _ ->
-                            JsonPrimitive("${src.date.toString()} | ${src.price}")
+                            JsonPrimitive("${src.date.toString()} | ${src.close}")
                         }
                     ).create().toJson(possibleProfitPoint)
             )

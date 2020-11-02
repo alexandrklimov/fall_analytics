@@ -1,3 +1,5 @@
 rootProject.name = 'fall-analytics'
 include 'lib'
+include 'client'
+include 'server'
 

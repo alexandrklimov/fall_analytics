@@ -2,11 +2,10 @@ package org.aklimov.fall_analytics.lib.services.domain
 
 import org.aklimov.fall_analytics.lib.services.copmutation.Utils
 import java.time.LocalDate
-import java.util.*
 
 data class FallDetectResult(val base: Point, val end: Point)
 
-data class Point(val date: LocalDate, val price: Double)
+data class Point(val date: LocalDate, val close: Double, val open: Double)
 
 class PossibleProfitPoint(
     val fdr: FallDetectResult,
@@ -18,13 +17,13 @@ class PossibleProfitPoint(
     val lowestChangeFromStartPct: Double? = if (lowest == null) {
         null
     } else {
-        Utils.computeChng(fdr.base.price, lowest.price) * 100
+        Utils.computeChng(fdr.base.close, lowest.close) * 100
     }
 
     val maxPossibleProfitFromEndPct: Double? = if (maxPossibleProfit == null) {
         null
     } else {
-        Utils.computeChng(fdr.end.price, maxPossibleProfit.price) * 100
+        Utils.computeChng(fdr.end.close, maxPossibleProfit.close) * 100
     }
 
     override fun equals(other: Any?): Boolean {
