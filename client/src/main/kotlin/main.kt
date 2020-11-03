@@ -6,6 +6,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.html.div
 import kotlinx.html.dom.create
+import kscience.plotly.layout
 import kscience.plotly.models.ScatterMode
 import kscience.plotly.models.TraceType
 import kscience.plotly.plot
