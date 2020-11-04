@@ -1,4 +1,4 @@
-package org.aklimov.fall_ananlytics.server
+package org.aklimov.fall_analytics.server
 
 import io.ktor.application.*
 import io.ktor.http.*
@@ -9,6 +9,8 @@ import io.ktor.server.netty.*
 import io.ktor.util.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+
 import org.aklimov.fall_analytics.shared.TestDto
 
 fun main(){
