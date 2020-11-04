@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import mu.KLogging
 import org.aklimov.fall_analytics.lib.services.domain.AlreadyLoadedInfo
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 
 /**
  * MOEX ISS allows to load data in paged-mode, no more then 100 rows per page.

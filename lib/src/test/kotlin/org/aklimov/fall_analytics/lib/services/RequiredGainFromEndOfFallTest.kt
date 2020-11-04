@@ -2,7 +2,7 @@ package org.aklimov.fall_analytics.lib.services
 
 import kotlinx.coroutines.runBlocking
 import org.aklimov.fall_analytics.lib.services.copmutation.RequiredGainFromEndOfFall
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 import org.jetbrains.exposed.sql.Database
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -21,7 +21,7 @@ import java.sql.DriverManager
 class RequiredGainFromEndOfFallTest {
 
     @Test
-    fun test(){
+    fun test() {
         Database.connect({
             DriverManager.getConnection("jdbc:postgresql://localhost/fall_analytics?user=postgres&password=q1")
         })

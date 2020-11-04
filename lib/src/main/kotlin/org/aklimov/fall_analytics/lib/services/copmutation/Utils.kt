@@ -1,9 +1,8 @@
 package org.aklimov.fall_analytics.lib.services.copmutation
 
 import org.aklimov.fall_analytics.lib.services.domain.FallDetectResult
-import org.aklimov.fall_analytics.lib.services.domain.OpenClose
 import org.aklimov.fall_analytics.lib.services.domain.Point
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.SQLException
 import java.time.Instant
@@ -14,14 +13,14 @@ import kotlin.math.abs
 
 class Utils private constructor() {
 
-    companion object{
+    companion object {
 
         @Throws(SQLException::class)
-        fun loadData(ticker: Ticker): Set<Point>{
+        fun loadData(ticker: Ticker): Set<Point> {
             val data = mutableSetOf<Point>()
 
-            transaction{
-                connection.createStatement().executeQuery("SELECT tradedate, close, open FROM ${ticker.value}").use{
+            transaction {
+                connection.createStatement().executeQuery("SELECT tradedate, close, open FROM ${ticker.value}").use {
                     while (it.next()) {
                         data.add(
                             Point(
@@ -77,13 +76,14 @@ class Utils private constructor() {
 
         fun computeChng(base: Double, other: Double): Double = (other - base) / base
 
-        fun checkListOfGrow(points: List<Point>): Boolean{
-            val priceList = listOf(points.first().close, points[1].open) + points.subList(1, points.size).map(Point::close)
+        fun checkListOfGrow(points: List<Point>): Boolean {
+            val priceList =
+                listOf(points.first().close, points[1].open) + points.subList(1, points.size).map(Point::close)
             val minPrice = requireNotNull(priceList.minOrNull())
             return (points.first().close == minPrice) or (points[1].open == minPrice)
         }
 
-        fun computeChngOfWnd(points: List<Point>): Double{
+        fun computeChngOfWnd(points: List<Point>): Double {
             val base = minOf(points.first().close, points[1].open)
             val maxCloseOfWnd = requireNotNull(
                 points.subList(1, points.size).map(Point::close).maxOrNull()

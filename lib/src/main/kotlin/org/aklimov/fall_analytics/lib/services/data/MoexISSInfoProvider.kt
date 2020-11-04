@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
 import io.ktor.client.request.*
 import mu.KLogging
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 
 interface InfoProvider{
     suspend fun loadTqbrShares(): List<Ticker>

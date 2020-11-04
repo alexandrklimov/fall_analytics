@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation(project(":shared"))
+    implementation(kotlin("stdlib-jdk8"))
     implementation("io.ktor:ktor-server-netty:1.4.1")
 }

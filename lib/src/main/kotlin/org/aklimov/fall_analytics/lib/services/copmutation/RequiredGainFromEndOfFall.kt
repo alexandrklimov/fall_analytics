@@ -9,7 +9,7 @@ import org.aklimov.fall_analytics.lib.services.copmutation.Utils.Companion.loadD
 import org.aklimov.fall_analytics.lib.services.domain.FallDetectResult
 import org.aklimov.fall_analytics.lib.services.domain.Point
 import org.aklimov.fall_analytics.lib.services.domain.PossibleProfitPoint
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 import java.time.LocalDate
 import java.util.*
 import java.util.stream.Collectors

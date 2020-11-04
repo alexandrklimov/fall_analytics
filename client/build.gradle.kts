@@ -1,5 +1,6 @@
 plugins {
-    id("org.jetbrains.kotlin.js")
+    kotlin("js")
+    kotlin("plugin.serialization")
 }
 
 group = "org.aklimov.fall_analytics"

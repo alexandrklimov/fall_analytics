@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import kotlinx.coroutines.flow.collect
 import mu.KLogging
 import org.aklimov.fall_analytics.lib.services.domain.AlreadyLoadedInfo
-import org.aklimov.fall_analytics.lib.services.domain.Ticker
+import org.aklimov.fall_analytics.shared.Ticker
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate

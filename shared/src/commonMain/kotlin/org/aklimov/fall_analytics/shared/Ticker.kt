@@ -1,6 +1,9 @@
-package org.aklimov.fall_analytics.lib.services.domain
+package org.aklimov.fall_analytics.shared
 
-class Ticker(tickerArg: String) {
+import kotlinx.serialization.Serializable
+
+@Serializable
+class Ticker(private val tickerArg: String) {
     val value = tickerArg.toLowerCase()
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -18,6 +21,4 @@ class Ticker(tickerArg: String) {
     override fun toString(): String {
         return "Ticker(value='$value')"
     }
-
-
 }

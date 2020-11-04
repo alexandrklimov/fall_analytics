@@ -2,6 +2,8 @@ package org.aklimov.fall_analytics.lib.services.copmutation
 
 import mu.KLogging
 import org.aklimov.fall_analytics.lib.services.domain.*
+import org.aklimov.fall_analytics.shared.GrowChangeStatRes
+import org.aklimov.fall_analytics.shared.Ticker
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.nield.kotlinstatistics.median
 import org.nield.kotlinstatistics.percentile
