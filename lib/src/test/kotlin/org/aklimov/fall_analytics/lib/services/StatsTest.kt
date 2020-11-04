@@ -4,6 +4,7 @@ import org.aklimov.fall_analytics.lib.services.copmutation.Stats
 import org.aklimov.fall_analytics.lib.services.domain.ValidPercentilesEnum
 import org.aklimov.fall_analytics.shared.Ticker
 import org.jetbrains.exposed.sql.Database
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +19,7 @@ import java.sql.DriverManager
     classes = [TestConfiguration::class]
 )
 @EnableAutoConfiguration
+@Disabled
 class StatsTest {
 
     @Test

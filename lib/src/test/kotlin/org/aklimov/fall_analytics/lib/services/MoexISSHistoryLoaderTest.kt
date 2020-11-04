@@ -9,6 +9,7 @@ import org.aklimov.fall_analytics.lib.services.data.MoexISSHistoryLoader
 import org.aklimov.fall_analytics.lib.services.data.MoexISSHistorySaverImpl
 import org.aklimov.fall_analytics.lib.services.data.MoexISSInfoProvider
 import org.jetbrains.exposed.sql.Database
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -25,6 +26,7 @@ import java.sql.DriverManager
     classes = [TestConfiguration::class]
 )
 @EnableAutoConfiguration
+@Disabled
 class MoexISSHistoryLoaderTest {
 
     @Autowired
