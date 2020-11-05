@@ -1,6 +1,7 @@
 package org.aklimov.fall_analytics.server
 
 import io.ktor.application.*
+import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -14,7 +15,11 @@ import kotlinx.serialization.json.encodeToJsonElement
 import org.aklimov.fall_analytics.shared.TestDto
 
 fun main(){
-    val server = embeddedServer(Netty, 8080) {
+    val server = embeddedServer(Netty, 8082) {
+        install(CORS){
+            anyHost()
+        }
+
         routing {
             route("/api"){
                 get("/echo") {
