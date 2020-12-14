@@ -2,45 +2,12 @@ package org.aklimov.fall_analytics.lib.services.copmutation
 
 import org.aklimov.fall_analytics.lib.services.domain.FallDetectResult
 import org.aklimov.fall_analytics.lib.services.domain.Point
-import org.aklimov.fall_analytics.shared.Ticker
-import org.jetbrains.exposed.sql.transactions.transaction
-import java.sql.SQLException
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 import kotlin.math.abs
 
 class Utils private constructor() {
 
     companion object {
-
-        @Throws(SQLException::class)
-        fun loadData(ticker: Ticker): Set<Point> {
-            val data = mutableSetOf<Point>()
-
-            transaction {
-                connection.createStatement().executeQuery("SELECT tradedate, close, open FROM ${ticker.value}").use {
-                    while (it.next()) {
-                        data.add(
-                            Point(
-                                LocalDate.ofInstant(
-                                    Instant.ofEpochMilli(
-                                        it.getTimestamp("tradedate").time
-                                    ),
-                                    ZoneId.systemDefault()
-                                ),
-                                it.getDouble("close"),
-                                it.getDouble("open"),
-                            )
-                        )
-                    }
-                }
-            }
-
-            return data
-        }
-
 
         fun fallDetect(data: NavigableSet<Point>, fallChng: Double): List<FallDetectResult> {
             if (data.size < 2) return emptyList()

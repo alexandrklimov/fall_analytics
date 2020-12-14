@@ -1,8 +1,5 @@
-package org.aklimov.fall_analytics.shared
+package org.aklimov.fall_analytics.lib.services.domain
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class GrowChangeStatRes(
     val period: Int,
     val mean: Double,

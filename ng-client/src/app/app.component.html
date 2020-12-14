@@ -1,0 +1,34 @@
+<mat-toolbar role="heading">
+  <span>Main page</span>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened role="navigation">
+    <div class="sidenav-content">
+      <mat-form-field appearance="outline">
+        <mat-label>Ticker</mat-label>
+        <mat-select panelClass="dropDown-panel" (selectionChange)="onTickerChng($event)">
+          <mat-option *ngFor="let ticket of tickets" [value]="ticket">{{ticket}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <ng-container *ngIf="(chartProps.ohlcData | async)?.length">
+        <mat-form-field appearance="outline">
+          <input matInput placeholder="Fall in pct" type="number" #ptcInput>
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="computeRequiredGainFromEndOfFall()">Compute on Fall</button>
+      </ng-container>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content role="main">
+    <div class="chart-container" style="background-color: aliceblue;"
+         #chartContainer>
+      <plotly [data]="chartProps.ohlcData | async"
+              [chartHeight]="chartProps.chartAreaHeight"
+              [chartWidth]="chartProps.chartAreaWidth">
+      </plotly>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+

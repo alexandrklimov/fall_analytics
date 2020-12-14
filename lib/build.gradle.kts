@@ -2,20 +2,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    id("org.jetbrains.kotlin.plugin.spring") version "1.4.10"
+    kotlin("plugin.spring")
 }
 
 val ktorVersion = "1.4.1"
 
 repositories {
     mavenCentral()
-    maven{
-        url = uri("https://dl.bintray.com/kotlin/exposed/")
-    }
 }
 
 dependencies {
-    implementation(project(":shared"))
+    //implementation(project(":shared"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -24,7 +21,6 @@ dependencies {
     implementation( "org.springframework:spring-jdbc:5.2.9.RELEASE")
     implementation( "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3")
     implementation("io.github.microutils:kotlin-logging:2.0.3")
-    implementation("org.jetbrains.exposed:exposed:0.17.7")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.nield:kotlin-statistics:1.2.1")
 

@@ -1,36 +1,11 @@
 package org.aklimov.fall_analytics.server
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.util.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
 
-import org.aklimov.fall_analytics.shared.TestDto
+@SpringBootApplication
+class ServerApp()
 
-fun main(){
-    val server = embeddedServer(Netty, 8082) {
-        install(CORS){
-            anyHost()
-        }
-
-        routing {
-            route("/api"){
-                get("/echo") {
-                    val respDto = TestDto(call.parameters.getOrFail("message"))
-                    call.respondText(
-                        Json.encodeToString(respDto),
-                        ContentType.Application.Json
-                    )
-                }
-            }
-        }
-    }
-    server.start(wait = true)
+fun main(args: Array<String>){
+    runApplication<ServerApp>(*args)
 }

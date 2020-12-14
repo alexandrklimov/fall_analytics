@@ -1,14 +1,15 @@
 package org.aklimov.fall_analytics.lib.services
 
 import kotlinx.coroutines.runBlocking
-import org.aklimov.fall_analytics.lib.services.copmutation.RequiredGainFromEndOfFall
-import org.aklimov.fall_analytics.shared.Ticker
-import org.jetbrains.exposed.sql.Database
+import org.aklimov.fall_analytics.lib.services.copmutation.RequiredGainFromEndOfFallFinder
+import org.aklimov.fall_analytics.lib.services.dao.SqlOhlcDao
+import org.aklimov.fall_analytics.lib.services.domain.Ticker
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
-import java.sql.DriverManager
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 @SpringBootTest(
     args = [
@@ -20,16 +21,15 @@ import java.sql.DriverManager
 )
 @EnableAutoConfiguration
 @Disabled
-class RequiredGainFromEndOfFallTest {
+class RequiredGainFromEndOfFallFinderTest {
+
+    @Autowired
+    lateinit var jdbcTpl: NamedParameterJdbcTemplate
 
     @Test
     fun test() {
-        Database.connect({
-            DriverManager.getConnection("jdbc:postgresql://localhost/fall_analytics?user=postgres&password=q1")
-        })
-
         runBlocking {
-            RequiredGainFromEndOfFall().compute(Ticker("gazp"))
+            RequiredGainFromEndOfFallFinder(SqlOhlcDao(jdbcTpl)).compute(Ticker("gazp"))
         }
     }
 

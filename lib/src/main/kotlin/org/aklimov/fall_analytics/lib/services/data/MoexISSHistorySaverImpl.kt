@@ -4,15 +4,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import kotlinx.coroutines.flow.collect
 import mu.KLogging
-import org.aklimov.fall_analytics.lib.services.domain.AlreadyLoadedInfo
-import org.aklimov.fall_analytics.shared.Ticker
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.aklimov.fall_analytics.lib.services.dao.OhlcDao
+import org.aklimov.fall_analytics.lib.services.domain.Ticker
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import java.sql.Timestamp
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 interface HistorySaver {
     suspend fun actualize(ticker: Ticker)
@@ -23,22 +19,20 @@ interface HistorySaver {
  */
 class MoexISSHistorySaverImpl(
     jdbcTemplateArg: JdbcTemplate,
-    private val historyLoader: HistoryLoader
+    private val historyLoader: HistoryLoader,
+    private val ohlcDao: OhlcDao
 ) : HistorySaver {
     private val jdbcTemplate = NamedParameterJdbcTemplate(jdbcTemplateArg)
 
     override suspend fun actualize(ticker: Ticker) {
         logger.info { "Start Actualize Ticker [${ticker.value}] " }
 
-        val isTblExists = transaction {
-            db.dialect.allTablesNames().any { it == ticker.value }
-        }
 
         lateinit var cachedMetaData: Map<FieldName, Pair<Int, FieldTypesEnum>>
-        if (isTblExists) {
+        if (ohlcDao.checkTickerTableExists(ticker)) {
             logger.info { "${ticker.value} table exists" }
 
-            val alreadyLoadedInfo = obtainAlreadyLoadedInfo(ticker)
+            val alreadyLoadedInfo = ohlcDao.obtainAlreadyLoadedInfo(ticker)
             logger.info { "Already loaded info: $alreadyLoadedInfo" }
 
             //Check the last row number is coincide with data on the MOEX side
@@ -75,26 +69,6 @@ class MoexISSHistorySaverImpl(
             historyLoader.loadPages(ticker, 0, DATA_ARR_EXTRACTOR).collect {
                 saveHistoryPage(ticker, it, cachedMetaData)
             }
-        }
-    }
-
-    /**
-     * Get the last loaded date and row number
-     */
-    private fun obtainAlreadyLoadedInfo(ticker: Ticker): AlreadyLoadedInfo {
-        return jdbcTemplate.queryForMap(
-            "SELECT COUNT(tradedate) as row_num, MAX(tradedate) as tradedate FROM ${ticker.value}",
-            emptyMap<String, Any>()
-        ).run {
-            AlreadyLoadedInfo(
-                LocalDate.ofInstant(
-                    Instant.ofEpochMilli(
-                        (this["tradedate"] as Timestamp).time
-                    ),
-                    ZoneId.systemDefault()
-                ),
-                this["row_num"] as Long
-            )
         }
     }
 

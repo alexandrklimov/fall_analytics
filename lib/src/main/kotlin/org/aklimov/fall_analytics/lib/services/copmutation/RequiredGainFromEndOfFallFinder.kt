@@ -5,22 +5,20 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
 import org.aklimov.fall_analytics.lib.services.copmutation.Utils.Companion.computeChng
 import org.aklimov.fall_analytics.lib.services.copmutation.Utils.Companion.fallDetect
-import org.aklimov.fall_analytics.lib.services.copmutation.Utils.Companion.loadData
-import org.aklimov.fall_analytics.lib.services.domain.FallDetectResult
-import org.aklimov.fall_analytics.lib.services.domain.Point
-import org.aklimov.fall_analytics.lib.services.domain.PossibleProfitPoint
-import org.aklimov.fall_analytics.shared.Ticker
+import org.aklimov.fall_analytics.lib.services.dao.OhlcDao
+import org.aklimov.fall_analytics.lib.services.domain.*
 import java.time.LocalDate
 import java.util.*
 import java.util.stream.Collectors
 
-class RequiredGainFromEndOfFall {
+class RequiredGainFromEndOfFallFinder(private val ohlcDao: OhlcDao) {
+
     fun compute(
         ticker: Ticker,
         fallChng: Double = 0.15,
         printResult: Boolean = true
-    ): Pair<SortedSet<PossibleProfitPoint>, SortedSet<PossibleProfitPoint>> {
-        val data: NavigableSet<Point> = loadData(ticker).run {
+    ): GainFromEndOfFallResult {
+        val data: NavigableSet<Point> = ohlcDao.loadPoints(ticker).run {
             val ts = TreeSet(Comparator.comparing(Point::date))
             ts.addAll(this)
             ts
@@ -76,15 +74,15 @@ class RequiredGainFromEndOfFall {
 
         if (printResult) printResult(fallChng, success, fail)
 
-        return Pair(success, fail)
+        return GainFromEndOfFallResult(success, fail)
     }
 
 
     private fun printResult(
         fallChngLevel: Double,
         success: SortedSet<PossibleProfitPoint>,
-        fail: SortedSet<PossibleProfitPoint>)
-    {
+        fail: SortedSet<PossibleProfitPoint>
+    ) {
         System.out.println(
             """
                 
@@ -96,7 +94,8 @@ class RequiredGainFromEndOfFall {
         println("\n\t>>> POSITIVES <<<\n")
         success.forEach { possibleProfitPoint ->
             System.out.println(
-                GsonBuilder().setPrettyPrinting()
+                GsonBuilder().serializeSpecialFloatingPointValues()
+                    .setPrettyPrinting()
                     .registerTypeAdapter(
                         LocalDate::class.java,
                         JsonSerializer<String> { src, _, _ -> JsonPrimitive(src) }

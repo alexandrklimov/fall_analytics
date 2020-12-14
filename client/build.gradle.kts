@@ -22,7 +22,6 @@ dependencies {
     implementation("kscience.plotlykt:plotlykt-core-js:0.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.4.0")
     implementation(npm("plotly.js", "1.54.6"))
-
 }
 
 kotlin {
